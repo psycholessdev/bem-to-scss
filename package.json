@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "convert": "dist/index.js"
+    "bem-css-converter": "dist/index.js"
   },
   "files": [
     "dist"
