@@ -1,23 +1,7 @@
 {
   "name": "bem-css-converter",
-  "version": "0.1.13",
-  "description": "",
-  "keywords": [
-    "CSS",
-    "SCSS",
-    "LESS",
-    "BEM",
-    "convert",
-    "nesting",
-    "cli"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/psycholessdev/bem-to-scss"
-  },
-  "bugs": {
-    "url": "https://github.com/psycholessdev/bem-to-scss/issues"
-  },
+  "version": "0.1.14",
+  "description": "A CLI tool to convert flat BEM CSS classes into nested SCSS syntax",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
@@ -30,9 +14,24 @@
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "author": "psycholessdev",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/psycholessdev/bem-to-scss"
+  },
+  "bugs": {
+    "url": "https://github.com/psycholessdev/bem-to-scss/issues"
+  },
+  "keywords": [
+    "CSS",
+    "SCSS",
+    "LESS",
+    "BEM",
+    "convert",
+    "nesting",
+    "cli"
+  ],
   "type": "commonjs",
   "dependencies": {
     "@types/node": "^25.5.0",

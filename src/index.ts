@@ -324,12 +324,12 @@ program
   .description(
     'Convert flat BEM CSS to nested SCSS with support for modifiers, pseudo-classes, and media queries',
   )
-  .version('0.1.13')
+  .version('0.1.14')
   .argument('<input>', 'Input CSS file to convert')
   .argument('[output]', 'Output SCSS file (optional, defaults to stdout)')
   .action(async (input: string, output?: string) => {
     // Display header
-    console.log('\x1b[37m\x1b[44m%s\x1b[0m', 'BEM-CSS-converter', '\x1b[0m', ' v0.1.13')
+    console.log('\x1b[37m\x1b[44m%s\x1b[0m', 'BEM-CSS-converter', '\x1b[0m', ' v0.1.14')
 
     // Validate input file exists
     try {
