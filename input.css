@@ -8,20 +8,29 @@
   text-decoration: none;
   cursor: pointer;
   transition: background-color 0.15s linear;
-  &:hover {
-    background-color: rgba(29, 44, 64, 0.05);
-  }
-  > span {
-    color: black;
-  }
-  @media (max-width: 1599px) {
+}
+
+.order-item_error {
+  background-color: red;
+  opacity: 0.7;
+}
+
+.order-item:hover {
+  background-color: rgba(29, 44, 64, 0.05);
+}
+
+.order-item > span {
+  color: black;
+}
+
+@media (max-width: 1599px) {
+  .order-item {
     grid-template-columns: 400fr 280fr 20px;
   }
-  @media (max-width: 639px) {
+}
+
+@media (max-width: 639px) {
+  .order-item {
     padding: 20px 16px;
-  }
-  &_error {
-    background-color: red;
-    opacity: 0.7;
   }
 }

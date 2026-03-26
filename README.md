@@ -10,13 +10,6 @@ Supports both standard BEM (double dash `--` for modifiers) and single underscor
 npm install -g .
 ```
 
-Or run locally:
-
-```bash
-npm run build
-node dist/index.js <css-file>
-```
-
 ## Usage
 
 ```bash
@@ -28,9 +21,6 @@ The tool reads the CSS file and outputs the nested SCSS to stdout if no output f
 Examples:
 
 ```bash
-# Output to stdout
-bem-to-scss input.css
-
 # Output to file
 bem-to-scss input.css output.scss
 ```
@@ -62,12 +52,17 @@ Input CSS:
   transition: background-color 0.15s linear;
 }
 
+.order-item_error {
+  background-color: red;
+  opacity: 0.7;
+}
+
 .order-item:hover {
   background-color: rgba(29, 44, 64, 0.05);
 }
 
-.order-item:not(:last-child) {
-  border-bottom: 1px solid rgba(29, 44, 64, 0.1);
+.order-item > span {
+  color: black;
 }
 
 @media (max-width: 1599px) {
@@ -99,14 +94,18 @@ Output SCSS:
   &:hover {
     background-color: rgba(29, 44, 64, 0.05);
   }
-  &:not(:last-child) {
-    border-bottom: 1px solid rgba(29, 44, 64, 0.1);
+  > span {
+    color: black;
   }
   @media (max-width: 1599px) {
     grid-template-columns: 400fr 280fr 20px;
   }
   @media (max-width: 639px) {
     padding: 20px 16px;
+  }
+  &_error {
+    background-color: red;
+    opacity: 0.7;
   }
 }
 ```
@@ -146,38 +145,6 @@ Output SCSS:
     &_error {
       font-weight: bold;
     }
-  }
-}
-```
-
-## Example with Nested Selectors
-
-Input CSS:
-
-```css
-.order-item {
-  color: red;
-}
-
-.order-item img {
-  user-select: none;
-}
-
-.order-item > span {
-  color: black;
-}
-```
-
-Output SCSS:
-
-```scss
-.order-item {
-  color: red;
-  img {
-    user-select: none;
-  }
-  > span {
-    color: black;
   }
 }
 ```
