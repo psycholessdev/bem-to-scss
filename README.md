@@ -154,3 +154,7 @@ Output SCSS:
 - Selectors are simple BEM classes starting with `.`
 - No complex selectors with multiple classes or combinators
 - Declarations are standard CSS properties
+
+## GitHub repo
+
+⭐ Give me a star on GitHub: https://github.com/psycholessdev/bem-to-scss

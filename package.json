@@ -1,7 +1,23 @@
 {
   "name": "bem-css-converter",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "",
+  "keywords": [
+    "CSS",
+    "SCSS",
+    "LESS",
+    "BEM",
+    "convert",
+    "nesting",
+    "cli"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/psycholessdev/bem-to-scss"
+  },
+  "bugs": {
+    "url": "https://github.com/psycholessdev/bem-to-scss/issues"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
