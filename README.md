@@ -7,13 +7,13 @@ Supports both standard BEM (double dash `--` for modifiers) and single underscor
 ## Installation
 
 ```bash
-npm install -g bem-to-scss
+npm install -g bem-css-converter
 ```
 
 ## Usage
 
 ```bash
-bem-to-scss input.css [output.scss]
+bem-css-converter input.css [output.scss]
 ```
 
 The tool reads the CSS file and outputs the nested SCSS to stdout if no output file is specified, or writes to the specified file.
@@ -22,7 +22,7 @@ Examples:
 
 ```bash
 # Output to file
-bem-to-scss input.css output.scss
+bem-css-converter input.css output.scss
 ```
 
 ## Supported BEM Patterns

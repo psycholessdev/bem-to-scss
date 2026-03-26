@@ -1,5 +1,5 @@
 {
-  "name": "bem-to-scss",
+  "name": "bem-css-converter",
   "version": "0.1.0",
   "description": "",
   "main": "dist/index.js",
