@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 const { Command } = require('commander')
-const fs = require('fs')
+const fs = require('fs/promises')
 const postcss = require('postcss')
+const prettier = require('prettier')
 
 import type { Root, Rule, AtRule, Node } from 'postcss'
 
@@ -326,12 +327,14 @@ program
   .version('0.1.0')
   .argument('<input>', 'Input CSS file to convert')
   .argument('[output]', 'Output SCSS file (optional, defaults to stdout)')
-  .action((input: string, output?: string) => {
+  .action(async (input: string, output?: string) => {
     // Display header
     console.log('\x1b[37m\x1b[44m%s\x1b[0m', 'BEM-to-SCSS', '\x1b[0m', ' v0.1.0')
 
     // Validate input file exists
-    if (!fs.existsSync(input)) {
+    try {
+      await fs.access(input)
+    } catch {
       console.error(
         '\x1b[41m\x1b[37m %s \x1b[0m',
         `✗ Error:`,
@@ -343,12 +346,23 @@ program
 
     try {
       // Read and convert CSS
-      const css = fs.readFileSync(input, 'utf8')
+      const css = await fs.readFile(input, 'utf8')
       const result = convert(css)
 
       // Write to file or stdout
       if (output) {
-        fs.writeFileSync(output, result)
+        let finalResult = result
+        try {
+          finalResult = await prettier.format(result, { parser: 'scss' })
+        } catch (formatError: any) {
+          console.warn(
+            '\x1b[33m\x1b[43m %s \x1b[0m',
+            '⚠ Warning:',
+            '\x1b[0m',
+            `Could not format output with Prettier: ${formatError.message}, using unformatted result`,
+          )
+        }
+        await fs.writeFile(output, finalResult)
         console.log(
           '\x1b[37m\x1b[42m%s\x1b[0m',
           `✓ Successfully`,
