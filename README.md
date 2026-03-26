@@ -7,7 +7,7 @@ Supports both standard BEM (double dash `--` for modifiers) and single underscor
 ## Installation
 
 ```bash
-npm install -g .
+npm install -g bem-to-scss
 ```
 
 ## Usage
