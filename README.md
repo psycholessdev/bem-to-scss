@@ -13,16 +13,16 @@ npm install -g bem-css-converter
 ## Usage
 
 ```bash
-bem-css-converter input.css [output.scss]
+bem-css-converter input.css
 ```
 
+That's it!
 The tool reads the CSS file and outputs the nested SCSS to stdout if no output file is specified, or writes to the specified file.
 
-Examples:
+You can also specify output filename:
 
 ```bash
-# Output to file
-bem-css-converter input.css output.scss
+bem-css-converter input.css [output.scss]
 ```
 
 ## Supported BEM Patterns

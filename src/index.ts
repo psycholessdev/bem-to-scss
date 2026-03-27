@@ -324,12 +324,13 @@ program
   .description(
     'Convert flat BEM CSS to nested SCSS with support for modifiers, pseudo-classes, and media queries',
   )
-  .version('0.1.14')
+  .version('0.2.0')
   .argument('<input>', 'Input CSS file to convert')
   .argument('[output]', 'Output SCSS file (optional, defaults to stdout)')
   .action(async (input: string, output?: string) => {
     // Display header
-    console.log('\x1b[37m\x1b[44m%s\x1b[0m', 'BEM-CSS-converter', '\x1b[0m', ' v0.1.14')
+    const timestamp = performance.now()
+    console.log('\x1b[37m\x1b[44m%s\x1b[0m', 'BEM-CSS-converter', '\x1b[0m', ' v0.2.0')
 
     // Validate input file exists
     try {
@@ -344,36 +345,37 @@ program
       process.exit(1)
     }
 
+    if (!output) {
+      output = `${input.slice(0, input.length - 4)}.scss`
+    }
+
     try {
       // Read and convert CSS
       const css = await fs.readFile(input, 'utf8')
       const result = convert(css)
 
-      // Write to file or stdout
-      if (output) {
-        let finalResult = result
-        try {
-          finalResult = await prettier.format(result, { parser: 'scss' })
-        } catch (formatError: any) {
-          console.warn(
-            '\x1b[33m\x1b[43m %s \x1b[0m',
-            '⚠ Warning:',
-            '\x1b[0m',
-            `Could not format output with Prettier: ${formatError.message}, using unformatted result`,
-          )
-        }
-        await fs.writeFile(output, finalResult)
-        console.log(
-          '\x1b[37m\x1b[42m%s\x1b[0m',
-          `✓ Successfully`,
+      // Write to file
+      let finalResult = result
+      try {
+        finalResult = await prettier.format(result, { parser: 'scss' })
+      } catch (formatError: any) {
+        console.warn(
+          '\x1b[33m\x1b[43m %s \x1b[0m',
+          '⚠ Warning:',
           '\x1b[0m',
-          ` converted '${input}' to '${output}'`,
-          '\n\n',
-          '⭐ Give me a star on GitHub: https://github.com/psycholessdev/bem-to-scss',
+          `Could not format output with Prettier: ${formatError.message}, using unformatted result`,
         )
-      } else {
-        console.log(result)
       }
+      await fs.writeFile(output, finalResult)
+      const executionTime = Math.round(performance.now() - timestamp)
+      console.log(
+        '\x1b[38;2;255;255;255m\x1b[48;2;0;150;0m%s\x1b[0m',
+        `✓ Successfully`,
+        '\x1b[0m',
+        ` converted '${input}' to '${output}' in ${executionTime}ms`,
+        '\n\n',
+        '⭐ Give me a star on GitHub: https://github.com/psycholessdev/bem-to-scss',
+      )
     } catch (error: any) {
       console.error('\x1b[41m\x1b[37m %s \x1b[0m', '✗ Error:', '\x1b[0m', error.message)
       process.exit(1)
