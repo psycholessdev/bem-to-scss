@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 
-const { Command } = require('commander')
-const fs = require('fs/promises')
-const postcss = require('postcss')
-const prettier = require('prettier')
+import { Command } from 'commander'
+import fs from 'fs/promises'
+import postcss from 'postcss'
+import prettier from 'prettier'
+import semver from 'semver'
 
 import type { Root, Rule, AtRule, Node } from 'postcss'
+
+const VERSION = '0.2.1'
 
 /**
  * CSS modifier nodes (e.g., block--modifier or block_state)
@@ -277,6 +280,11 @@ function convert(css: string): string {
     output += outputNested(node, '  ')
     output += '}\n\n'
   }
+
+  // watermark
+  output += '\n\n// Converted with BEM CSS converter'
+  output += '\n// https://github.com/psycholessdev/bem-to-scss'
+
   return output.trim()
 }
 
@@ -340,13 +348,13 @@ program
   .description(
     'Convert flat BEM CSS to nested SCSS with support for modifiers, pseudo-classes, and media queries',
   )
-  .version('0.2.1')
+  .version(VERSION)
   .argument('<input>', 'Input CSS file to convert')
   .argument('[output]', 'Output SCSS file (optional, defaults to stdout)')
   .action(async (input: string, output?: string) => {
     // Display header
     const timestamp = performance.now()
-    console.log('\x1b[37m\x1b[44m%s\x1b[0m', 'BEM-CSS-converter', '\x1b[0m', ' v0.2.1')
+    console.log('\x1b[37m\x1b[44m%s\x1b[0m', 'BEM-CSS-converter', '\x1b[0m', ` v${VERSION}`)
 
     // Validate input file exists
     try {
@@ -392,6 +400,24 @@ program
         '\n\n',
         '⭐ Give me a star on GitHub: https://github.com/psycholessdev/bem-to-scss',
       )
+
+      // New version check
+      try {
+        const res = await fetch(
+          'https://raw.githubusercontent.com/psycholessdev/bem-to-scss/refs/heads/main/package.json',
+        )
+        const { version = VERSION } = (await res.json()) as { version: string }
+
+        if (semver.lt(VERSION, version)) {
+          console.log(
+            '\n\n\x1b[37m\x1b[44m%s\x1b[0m',
+            `New version ${version} is available!`,
+            '\x1b[0m',
+            '\n\nuse npm install -g bem-css-converter\n',
+            'or npm install bem-css-converter --save-dev',
+          )
+        }
+      } catch (error: any) {}
     } catch (error: any) {
       console.error('\x1b[41m\x1b[37m %s \x1b[0m', '✗ Error:', '\x1b[0m', error.message)
       process.exit(1)
