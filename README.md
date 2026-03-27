@@ -1,6 +1,9 @@
-# BEM to SCSS Converter
+# BEM to SCSS/LESS Converter
 
-A CLI tool to convert flat BEM CSS classes into nested SCSS syntax.
+![npm](https://img.shields.io/npm/v/bem-css-converter)
+![downloads](https://img.shields.io/npm/dw/bem-css-converter)
+
+Convert flat [BEM class](https://getbem.com/naming/) names into clean, nested SCSS/LESS structure automatically.
 
 Supports both standard BEM (double dash `--` for modifiers) and single underscore `_` for modifiers.
 
@@ -36,6 +39,46 @@ bem-css-converter input.css [output.scss]
 - Nested selectors: `.block img` → `img { ... }`
 
 ## Example
+
+Input CSS:
+
+```css
+.block {
+  color: red;
+}
+
+.block--error {
+  color: blue;
+}
+
+.block__element {
+  font-size: 14px;
+}
+
+.block__element--error {
+  font-weight: bold;
+}
+```
+
+Output SCSS:
+
+```scss
+.block {
+  color: red;
+  &--error {
+    color: blue;
+  }
+
+  &__element {
+    font-size: 14px;
+    &--error {
+      font-weight: bold;
+    }
+  }
+}
+```
+
+## Example with media queries
 
 Input CSS:
 
@@ -110,44 +153,9 @@ Output SCSS:
 }
 ```
 
-## Example with Single Underscore Modifiers
+## Motivation
 
-Input CSS:
-
-```css
-.block {
-  color: red;
-}
-
-.block_error {
-  color: blue;
-}
-
-.block__element {
-  font-size: 14px;
-}
-
-.block__element_error {
-  font-weight: bold;
-}
-```
-
-Output SCSS:
-
-```scss
-.block {
-  color: red;
-  &_error {
-    color: blue;
-  }
-  &__element {
-    font-size: 14px;
-    &_error {
-      font-weight: bold;
-    }
-  }
-}
-```
+I built this to speed up my workflow when converting legacy CSS into structured SCSS
 
 ## Assumptions
 
