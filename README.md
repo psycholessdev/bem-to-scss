@@ -166,3 +166,8 @@ I built this to speed up my workflow when converting legacy CSS into structured 
 ## GitHub repo
 
 ⭐ Give me a star on GitHub: https://github.com/psycholessdev/bem-to-scss
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE.md).  
+You're free to use, modify, and distribute the code, but **please include attribution** by keeping the original license text and a link to this repository.
