@@ -181,47 +181,47 @@ function convert(css: string): string {
     if (rule.parent && rule.parent.type !== 'root') return
 
     const selector = rule.selector.trim()
+    const selectors = selector.split(',').map(s => s.trim())
+    const declarations = rule.nodes
+      .map((n: Node) => (n.type === 'decl' ? n.toString() + ';' : n.toString()))
+      .join('\n')
 
-    // Handle pseudo-classes (e.g. .block:hover, .block:not(:last-child))
-    if (selector.includes(':')) {
-      if (selector.startsWith('.')) {
-        const className = selector.slice(1)
-        const parts = className.split(':')
-        const bem = parts[0]!
-        const pseudo = ':' + parts.slice(1).join(':')
+    for (const sel of selectors) {
+      // Handle pseudo-classes (e.g. .block:hover, .block:not(:last-child))
+      if (sel.includes(':')) {
+        if (sel.startsWith('.')) {
+          const className = sel.slice(1)
+          const parts = className.split(':')
+          const bem = parts[0]!
+          const pseudo = ':' + parts.slice(1).join(':')
 
-        const parsed = parseBemClass(bem)
-        if (parsed.block) {
-          const declarations = rule.nodes
-            .map((n: Node) => (n.type === 'decl' ? n.toString() + ';' : n.toString()))
-            .join('\n')
-          const content = `&${pseudo} {\n${declarations}\n}`
-          addToNode(parsed.block, parsed.element, parsed.modifier, parsed.modifierSep, content)
+          const parsed = parseBemClass(bem)
+          if (parsed.block) {
+            const content = `&${pseudo} {\n${declarations}\n}`
+            addToNode(parsed.block, parsed.element, parsed.modifier, parsed.modifierSep, content)
+          }
         }
       }
-    }
-    // Handle nested selectors and regular rules (e.g. .block, .block img, .block > span)
-    else {
-      const bemRegex = /^\.([a-zA-Z0-9_-]+(?:__[a-zA-Z0-9_-]+(?:--?[a-zA-Z0-9_-]+)?)?)(?:\s+(.+))?$/
-      const match = selector.match(bemRegex)
+      // Handle nested selectors and regular rules (e.g. .block, .block img, .block > span)
+      else {
+        const bemRegex =
+          /^\.([a-zA-Z0-9_-]+(?:__[a-zA-Z0-9_-]+(?:--?[a-zA-Z0-9_-]+)?)?)(?:\s+(.+))?$/
+        const match = sel.match(bemRegex)
 
-      if (match) {
-        const bem = match[1]!
-        const nested = match[2]
+        if (match) {
+          const bem = match[1]!
+          const nested = match[2]
 
-        const parsed = parseBemClass(bem)
-        if (parsed.block) {
-          const declarations = rule.nodes
-            .map((n: Node) => (n.type === 'decl' ? n.toString() + ';' : n.toString()))
-            .join('\n')
+          const parsed = parseBemClass(bem)
+          if (parsed.block) {
+            let content = declarations
+            // If rule has nested selector, wrap it
+            if (nested) {
+              content = `${nested} {\n${declarations}\n}`
+            }
 
-          let content = declarations
-          // If rule has nested selector, wrap it
-          if (nested) {
-            content = `${nested} {\n${declarations}\n}`
+            addToNode(parsed.block, parsed.element, parsed.modifier, parsed.modifierSep, content)
           }
-
-          addToNode(parsed.block, parsed.element, parsed.modifier, parsed.modifierSep, content)
         }
       }
     }
@@ -236,18 +236,34 @@ function convert(css: string): string {
   root.walkAtRules('media', (atRule: AtRule) => {
     atRule.walkRules((rule: Rule) => {
       const selector = rule.selector.trim()
+      const selectors = selector.split(',').map(s => s.trim())
 
-      if (selector.startsWith('.')) {
-        const className = selector.slice(1)
-        const parsed = parseBemClass(className)
+      for (const sel of selectors) {
+        if (sel.startsWith('.')) {
+          let bem: string
+          let pseudo = ''
+          const className = sel.slice(1)
+          if (className.includes(':')) {
+            const parts = className.split(':')
+            bem = parts[0]!
+            pseudo = ':' + parts.slice(1).join(':')
+          } else {
+            bem = className
+          }
+          const parsed = parseBemClass(bem)
 
-        if (parsed.block) {
-          const declarations = rule.nodes
-            .map((n: Node) => (n.type === 'decl' ? n.toString() + ';' : n.toString()))
-            .join('\n')
-          const content = `@media ${atRule.params} {\n${declarations}\n}`
+          if (parsed.block) {
+            const declarations = rule.nodes
+              .map((n: Node) => (n.type === 'decl' ? n.toString() + ';' : n.toString()))
+              .join('\n')
+            let content = declarations
+            if (pseudo) {
+              content = `&${pseudo} {\n${declarations}\n}`
+            }
+            content = `@media ${atRule.params} {\n${content}\n}`
 
-          addToNode(parsed.block, parsed.element, parsed.modifier, parsed.modifierSep, content)
+            addToNode(parsed.block, parsed.element, parsed.modifier, parsed.modifierSep, content)
+          }
         }
       }
     })
@@ -324,13 +340,13 @@ program
   .description(
     'Convert flat BEM CSS to nested SCSS with support for modifiers, pseudo-classes, and media queries',
   )
-  .version('0.2.0')
+  .version('0.2.1')
   .argument('<input>', 'Input CSS file to convert')
   .argument('[output]', 'Output SCSS file (optional, defaults to stdout)')
   .action(async (input: string, output?: string) => {
     // Display header
     const timestamp = performance.now()
-    console.log('\x1b[37m\x1b[44m%s\x1b[0m', 'BEM-CSS-converter', '\x1b[0m', ' v0.2.0')
+    console.log('\x1b[37m\x1b[44m%s\x1b[0m', 'BEM-CSS-converter', '\x1b[0m', ' v0.2.1')
 
     // Validate input file exists
     try {

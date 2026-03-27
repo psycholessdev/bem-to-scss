@@ -1,6 +1,6 @@
 {
   "name": "bem-css-converter",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A CLI tool to convert flat BEM CSS classes into nested SCSS syntax",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
