@@ -5,7 +5,7 @@ import fs from 'fs/promises'
 import semver from 'semver'
 import { convert } from './convert.js'
 
-const VERSION = '0.2.3'
+const VERSION = '0.2.5'
 
 function bootstrapCli() {
   const program = new Command()
