@@ -40,6 +40,10 @@ interface BemParsed {
   modifierSep: string
 }
 
+interface ConvertConfig {
+  hideWatermark?: boolean
+}
+
 /**
  * Converts flat BEM CSS into nested SCSS format with support for:
  * - Block modifiers (-- or _ separator)
@@ -48,7 +52,7 @@ interface BemParsed {
  * - Media queries
  * - Nested selectors (e.g., .block img)
  */
-export async function convert(css: string): Promise<string> {
+export async function convert(css: string, config: ConvertConfig = {}): Promise<string> {
   const root: Root = postcss.parse(css)
   const blocks = new Map<string, BlockNode>()
 
@@ -278,8 +282,10 @@ export async function convert(css: string): Promise<string> {
   output = output.trim()
 
   // watermark
-  output += '\n\n// Converted with BEM CSS converter'
-  output += '\n// https://github.com/psycholessdev/bem-to-scss'
+  if (!config.hideWatermark) {
+    output += '\n\n// Converted with BEM CSS converter'
+    output += '\n// https://github.com/psycholessdev/bem-to-scss'
+  }
 
   try {
     output = await prettier.format(output, { parser: 'scss' })

@@ -5,7 +5,7 @@ import fs from 'fs/promises'
 import semver from 'semver'
 import { convert } from './convert.js'
 
-const VERSION = '0.2.5'
+const VERSION = '0.2.6'
 
 function bootstrapCli() {
   const program = new Command()
@@ -18,7 +18,10 @@ function bootstrapCli() {
     .version(VERSION)
     .argument('<input>', 'Input CSS file to convert')
     .argument('[output]', 'Output SCSS file (optional, defaults to stdout)')
+    .option('--no-watermark', 'Disable watermark in output')
     .action(async (input: string, output?: string) => {
+      const { watermark = true } = program.opts()
+
       // Display header
       const timestamp = performance.now()
       console.log('\x1b[37m\x1b[44m%s\x1b[0m', 'BEM-CSS-converter', '\x1b[0m', ` v${VERSION}`)
@@ -43,7 +46,7 @@ function bootstrapCli() {
       try {
         // Read and convert CSS
         const css = await fs.readFile(input, 'utf8')
-        const result = await convert(css)
+        const result = await convert(css, { hideWatermark: !watermark })
 
         // Write to file
         await fs.writeFile(output, result)
