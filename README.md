@@ -20,7 +20,7 @@ bem-css-converter input.css
 ```
 
 That's it!
-The tool reads the CSS file and outputs the nested SCSS to stdout if no output file is specified, or writes to the specified file.
+The tool reads the CSS file and outputs the nested SCSS to the output file.
 
 You can also specify output filename:
 
