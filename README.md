@@ -153,6 +153,17 @@ Output SCSS:
 }
 ```
 
+## Non-CLI usage
+
+You can use the tool as a function in NodeJS environment:
+
+```tsx
+// npm i bem-css-converter
+import { convert } from 'bem-css-converter'
+
+const reconstructedScss = await convert(rawCss)
+```
+
 ## Motivation
 
 I built this to speed up my workflow when converting legacy CSS into structured SCSS
@@ -163,11 +174,11 @@ I built this to speed up my workflow when converting legacy CSS into structured 
 - No complex selectors with multiple classes or combinators
 - Declarations are standard CSS properties
 
-## GitHub repo
-
-⭐ Give me a star on GitHub: https://github.com/psycholessdev/bem-to-scss
-
 ## License
 
 This project is licensed under the [MIT License](./LICENSE.md).  
 You're free to use, modify, and distribute the code, but **please include attribution** by keeping the original license text and a link to this repository.
+
+## GitHub repo
+
+⭐ Give me a star on GitHub: https://github.com/psycholessdev/bem-to-scss
